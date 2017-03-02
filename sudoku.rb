@@ -16,6 +16,7 @@ class SudokuGame
 
   def retrieve_pos_from_ui
     p = nil
+    self.board.render
     until p && legal_illegibility_of_p?(p)
       puts "Please enter a position on the board (e.g., '3,4')"
       print "> "
@@ -78,7 +79,6 @@ class SudokuGame
       val.between?(0, 9)
   end
 
-  private
   attr_reader :board
 end
 
