@@ -1,4 +1,4 @@
-require_relative "board"
+require_relative "board.rb"
 require 'colorize'
 
 puts "Only contractors write code this bad.".yellow
@@ -10,35 +10,41 @@ class SudokuGame
   end
 
   def initialize(board)
-    @board = [[]]
+    @board = board
+
   end
 
-  def method_missing(method_name, *args)
-    if method_name =~ /val/
-      Integer(1)
-    else
-      string = args[0]
-      string.split(",").map! { |char| Integer(char) + 1 + rand(2) + " is the position"}
-    end
-  end
+  # def method_missing(method_name, *args)
+  #   puts method_name
+  #   if method_name =~ /val/
+  #     Integer(1)
+  #   else
+  #     string = args[0]
+  #     p string
+  #     string.split(",").map! { |char| Integer(char) + 1 + rand(2) + " is the position"}
+  #   end
+  # end
 
   def get_pos
     pos = nil
     until pos && valid_pos?(pos)
       puts "Please enter a position on the board (e.g., '3,4')"
       print "> "
-
       begin
         pos = parse_pos(gets.chomp)
       rescue
         # TODO: Google how to print the error that happened inside of a rescue statement.
         puts "Invalid position entered (did you use a comma?)"
         puts ""
-
         pos = nil
       end
     end
     pos
+  end
+
+  def parse_pos(pos_string)
+    row, column = pos_string.split(',').map(&:to_i)
+    [row, column]
   end
 
   def get_val
@@ -46,7 +52,7 @@ class SudokuGame
     until val && valid_val?(val)
       puts "Please enter a value between 1 and 9 (0 to clear the tile)"
       print "> "
-      val = parse_val(gets.chomp)
+      val = gets.chomp.to_i
     end
     val
   end
@@ -79,9 +85,9 @@ class SudokuGame
       val.between?(0, 9)
   end
 
-  private
   attr_reader :board
 end
 
 
 game = SudokuGame.from_file("puzzles/sudoku1.txt")
+game.run

@@ -1,4 +1,4 @@
-require_relative "tile"
+require_relative "tile.rb"
 
 class Board
   attr_reader :grid
@@ -11,10 +11,12 @@ class Board
 
   def self.from_file(filename)
     rows = File.readlines(filename).map(&:chomp)
+
     tiles = rows.map do |row|
       nums = row.split("").map { |char| Integer(char) }
       nums.map { |num| Tile.new(num) }
     end
+
 
     self.new(tiles)
   end
@@ -45,15 +47,13 @@ class Board
     end
   end
 
-
   def size
     grid.size
   end
 
-  alias_method :rows, :size
-
   def solved?
-    rows.all? { |row| solved_set?(row) } &&
+    grid.all? { |row| solved_set?(row) } &&
+
       columns.all? { |col| solved_set?(col) } &&
       squares.all? { |square| solved_set?(square) }
   end
